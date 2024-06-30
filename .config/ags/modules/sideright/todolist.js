@@ -7,14 +7,43 @@ import Todo from "../../services/todo.js";
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 
 const TodoListItem = (task, id, isDone, isEven = false) => {
-    const taskName = Widget.Label({
+   const taskName = Label({
         hexpand: true,
         xalign: 0,
         wrap: true,
         className: 'txt txt-small sidebar-todo-txt',
         label: task.content,
         selectable: true,
+   })
+   const taskNameRevealer = Revealer({
+     transition: 'none',
+     revealChild: true,
+     child: taskName
+    })
+    const taskEditEntry = Widget.Entry({
+        hexpand: true,
+        className: 'txt txt-small sidebar-todo-txt',
+        text: task.content,
+        onAccept: ({ text }) => {
+	    taskEditEntryRevealer.revealChild = false
+            taskNameRevealer.revealChild = true
+
+            if (text === '') return;
+            if (text !== task.content) Todo.edit(id, text);
+        },
     });
+    const taskEditEntryRevealer = Revealer({
+        transition: 'none',
+        revealChild: false,
+        child: taskEditEntry,
+    });
+
+    taskName.connect('button-press-event', () => {
+        taskNameRevealer.revealChild = false
+	taskEditEntryRevealer.revealChild = true
+        taskEditEntry.grab_focus();
+    });
+
     const actions = Box({
         hpack: 'end',
         className: 'spacing-h-5 sidebar-todo-actions',
@@ -67,7 +96,8 @@ const TodoListItem = (task, id, isDone, isEven = false) => {
             Widget.Box({
                 vertical: true,
                 children: [
-                    taskName,
+		    taskEditEntryRevealer,
+                    taskNameRevealer,
                     actions,
                 ]
             }),
