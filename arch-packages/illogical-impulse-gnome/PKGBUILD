@@ -9,6 +9,7 @@ depends=(
 	gnome-keyring
 	gnome-control-center
 	blueberry networkmanager
+	nautilus
 	gammastep
 	gnome-bluetooth-3.0
 )
