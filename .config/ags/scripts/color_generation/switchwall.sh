@@ -33,7 +33,7 @@ else
 	# Select and set image (hyprland)
 
     cd "$(xdg-user-dir PICTURES)" || return 1
-	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
+	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper' --no-buttons)"
 fi
 
 # Generate colors for ags n stuff
